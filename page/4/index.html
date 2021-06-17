@@ -1,0 +1,658 @@
+<!DOCTYPE html><html lang="zh" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>比特流技术 - 刘训灼的部落格</title><meta name="keywords" content="刘训灼,云原生,Kubernetes,Service Mesh,Istio,Envoy,Prometheus,APISIX"><meta name="author" content="刘训灼"><meta name="copyright" content="刘训灼"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Hi! 我是刘训灼，这里是我技术分享的地方">
+<meta property="og:type" content="website">
+<meta property="og:title" content="比特流技术">
+<meta property="og:url" content="https://www.liuxunzhuo.com/page/4/index.html">
+<meta property="og:site_name" content="比特流技术">
+<meta property="og:description" content="Hi! 我是刘训灼，这里是我技术分享的地方">
+<meta property="og:locale">
+<meta property="og:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png">
+<meta property="article:author" content="刘训灼">
+<meta property="article:tag" content="刘训灼,云原生,Kubernetes,Service Mesh,Istio,Envoy,Prometheus,APISIX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png"><link rel="shortcut icon" href="https://picreso.oss-cn-beijing.aliyuncs.com/favicon.png"><link rel="canonical" href="https://www.liuxunzhuo.com/page/4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '比特流技术',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-06-17 15:08:34'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/dmoon.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">比特流技术</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">比特流技术</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mixdeers@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/04/22/internet6/" title="应用层协议原理">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/a6.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="应用层协议原理"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/22/internet6/" title="应用层协议原理">应用层协议原理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-22T15:59:39.000Z" title="Created 2020-04-22 23:59:39">2020-04-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">应用层是我们日常接触到的层次，比如：
+
+
+
+应用层体系结构
+通常有三个模式
+
+
+C/S 模式:
+服务器:
+
+总是打开的主机
+
+具有固定的、众所周知的IP地址
+
+主机群集常被用于创建强大的虚拟服务器
+
+
+客户机:
+
+同服务器端通信
+
+可以间断的同服务器连接
+
+可以拥有动态IP地址
+
+客户机相互之间不直接通信
+
+
+
+
+P2P体系结构:
+
+没有总是打开的服务器
+
+任意一对主机直接相互通信
+
+对等方间歇连接并且可以改变IP地址
+
+优点：自扩展性强
+
+缺点：难以管理
+
+
+
+
+C/S P2P的混合模式（结合两者优点）如：
+
+
+
+应用层通信原理
+网络应用实际上是端系统之间对等实体的进程在通信
+
+进程通信
+同一主机上的两个进程通过内部进程通信机制进行通信
+不同主机上的进程通过交换报文相互通信
+
+
+
+客户进程: 发起通信的进程
+
+服务器进程: 等待联系的进程
+
+注意:具有P2P体系结构的应用程序既有客户进程和服务器进程。
+
+
+
+进程与计算机网络的接口：套接字 socket
+在对等实体之间的进程通过套接字通信
+
+
+进程通过它的套接字在网络上发送和接收报文
+套接字又叫做应用程序编程接口API 
+用户通过AP ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/04/22/internet5/" title="协议层次以及服务模型">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/tcpp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="协议层次以及服务模型"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/22/internet5/" title="协议层次以及服务模型">协议层次以及服务模型</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-22T15:59:38.000Z" title="Created 2020-04-22 23:59:38">2020-04-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">经过我们之前对Internet的介绍，Internet是什么，我们可以理解到，Internet是一个极其复杂的系统。
+
+
+
+为什么我们要分层呢？
+清楚的结构允许我们对大型复杂系统定义其特定部分，探讨其各部分的关系，比如分层参考模型的讨论
+模块化使得系统的维护、升级简化改变其某一层服务的具体实现,对系统其余部分透明(不影响) 
+分层的弊端?
+各层可能重复较低层功能 …
+
+
+
+
+两种参考模型ISO/OSI 七层参考模型
+是国际通用标准，为我们后来发展做参考
+实际使用不多，比较繁杂。
+
+
+
+
+
+
+
+
+
+
+
+层号
+层的名称
+层的英文名称
+层的英语缩写
+
+
+7
+应用层
+Application
+A
+
+
+6
+表示层
+Presentation
+P
+
+
+5
+会话层
+Session
+S
+
+
+4
+传输层
+Transport
+T
+
+
+3
+网络层
+NetWork
+N
+
+
+2
+数据链路层
+Data Link
+DL
+
+
+1
+物理层
+Physical
+PL
+
+
+TCP/IP参考模型
+基于OSI 去掉表示层，会话层
+
+主要有两种变形：
+
+网络协议栈
+
+ 具体实现是通过协议实现，总的协议叫做协议栈
+
+
+应用层applic ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/04/22/jupyter1/" title="Jupyter Notebook详细教程（上）">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/jppt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Jupyter Notebook详细教程（上）"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/22/jupyter1/" title="Jupyter Notebook详细教程（上）">Jupyter Notebook详细教程（上）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-22T15:06:14.000Z" title="Created 2020-04-22 23:06:14">2020-04-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/">机器学习之旅</a></span></div><div class="content">
+Jupyter Notebook 是一个非常强大的工具，常用于交互式地开发和展示数据科学项目。它将代码和它的输出集成到一个文档中，并且结合了可视的叙述性文本、数学方程和其他丰富的媒体。它直观的工作流促进了迭代和快速的开发，使得 notebook 在当代数据科学、分析和越来越多的科学研究中越来越受欢迎。最重要的是，作为开源项目的一部分，它们是完全免费的。
+
+Jupyter 项目是早期 IPython Notebook 的继承者，它在 2010 年首次作为原型发布。尽管在 Jupyter Notebook 中可以使用许多不同的编程语言，但本文将重点介绍 Python，因为在 Jupyter Notebook 中 python 是最常见的。
+为了充分理解本教程，你应该熟悉编程，特别是 Python 和 pandas（译者注：Pandas 是python的一个数据分析包）。也就是说，如果你有编程经验，这篇文章中的 Python 不会太陌生，而 pandas 也是容易理解的。Jupyter Notebooks 也可以作为一个灵活的平台来运行 pandas 甚至是 Python，这将在这篇文章中 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/04/22/jupyter2/" title="Jupyter Notebook详细教程（下）">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/jppt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Jupyter Notebook详细教程（下）"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/22/jupyter2/" title="Jupyter Notebook详细教程（下）">Jupyter Notebook详细教程（下）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-22T15:05:17.000Z" title="Created 2020-04-22 23:05:17">2020-04-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/">机器学习之旅</a></span></div><div class="content">实例分析现在我们已经看了一个 Jupyter Notebook，是时候看看它们在实践中使用了，这应该会让你更清楚地了解它们为什么那么受欢迎。现在是时候开始使用前面提到的财富 500 数据集了。请记住，我们的目标是了解美国最大公司的利润在历史上是如何变化的。
+值得注意的是，每个人都会有自己的喜好和风格，但是一般原则仍然适用，如果你愿意，你可以在自己的 notebook 上跟随这一段，这也给了你自由发挥空间。
+命名你的 notebook在开始编写项目之前，你可能想要给它一个有意义的名称。也许有点让人困惑，你不能从 Notebook 的应用程序中命名或重命名你的 notebook，而必须使用仪表盘或你的文件浏览器来重命名 .ipynb 文件。我们将返回到仪表板，以重命名你之前创建的文件，它将有默认的 notebook 的文件名是 Untitled.ipynb 。
+你不能在 notebook 运行时重命名它，所以你首先要关闭它。最简单的方法就是从 notebook 菜单中选择 “File &gt; Close and Halt”。但是，您也可以通过在笔记本应用程序内 “Kernel &gt;  ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/04/22/internet4/" title="分组交换网络中的延迟、 丢失和吞吐量">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/delay.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分组交换网络中的延迟、 丢失和吞吐量"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/22/internet4/" title="分组交换网络中的延迟、 丢失和吞吐量">分组交换网络中的延迟、 丢失和吞吐量</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-22T14:59:38.000Z" title="Created 2020-04-22 22:59:38">2020-04-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">分组丢失和延迟是如何产生的？路由器分组缓冲区队列
+
+分组到达输出链路的速率超过输出链路的容量,产生延迟,甚至丢失
+
+分组在缓冲区队列排队, 按序等待
+
+
+
+分组延迟的四s种类型
+
+节点处理时延：
+nodal processing delay:
+
+检查错误位
+选择输出链路
+高速路由器处理延迟-微妙级
+
+
+排队时延：
+queueing delay:
+
+等待被发送到输出链路上的时间
+取决于路由器的拥塞程度
+
+
+传输时延：
+Transmission delay：
+
+R=链路带宽 (bps)
+
+ L=分组长度 (bits)
+
+ 发送分组比特流的时间 = L/R
+
+
+
+传播时延：
+Propagation delay:
+
+d = 物理链路的长度
+
+s = 介质的信号传播速度 (~2x108 m/sec)
+
+传播延迟 = d/s
+
+注意: s和R是两个完全不同的速度参量!
+s 是介质的信号传播速率，取决于介质等因素
+R是链路的带宽
+
+
+
+
+
+常常有人分不清 传播时延 和 传输时延
+其实很简单区分
+
+传播 类似于扩散 就是在距离上传播所花的时间
+
+传输 类似于输出 就是从节点输出到通信链路所花的时间
+
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/04/21/internet3/" title="电路交换原理和分组交换原理">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/inter.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="电路交换原理和分组交换原理"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/21/internet3/" title="电路交换原理和分组交换原理">电路交换原理和分组交换原理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-21T15:59:38.000Z" title="Created 2020-04-21 23:59:38">2020-04-21</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">
+我们有了 设备， 有了通信链路，那我们如何在网络中传输数据？
+
+
+基本原理：
+
+电路交换: 
+每次会话预留沿其路径(线路) 所需的独占资源–电话网
+
+分组交换:
+ 数据以离散的数据块通过网络 来发送
+
+
+电路交换基于电话网的交换原理
+
+网络资源比如宽带被分片
+
+多路复用(Multiple Access)
+
+分片分配到会话
+
+分片没有被会话使用的情况下，分片空载 (不共享)
+
+电路级性能(有保证)
+
+要求呼叫建立–建立一个专门的端到端线路(意味着每个链路上预留一个线路)
+
+链路带宽分片的方式
+
+频分-frequency division FDMA
+将频率分割
+
+时分-time division TDMA
+将时间分割
+
+
+
+
+
+分组交换
+和电路交换相比
+不会：
+
+带宽分片
+独占分配资源
+资源预留
+
+
+每个端到端的数据流被划分成分组 
+
+所有分组共享网络资源
+
+ 每个分组使用全部链路带宽
+
+ 资源按需使用
+
+
+资源竞争:
+
+资源需求总量可以大于可 获得资源的总量
+
+拥塞: 采用分组队列, 等待使用链路
+
+存储转发: 分组每次转发1站 • 在1个链路上传输
+
+每经过1个链路转发1次
+ 转发分 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/04/21/internet2/" title="谈谈网络边缘部分">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="谈谈网络边缘部分"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/21/internet2/" title="谈谈网络边缘部分">谈谈网络边缘部分</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-21T14:59:38.000Z" title="Created 2020-04-21 22:59:38">2020-04-21</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">
+在开始之前，再一次谈谈网络结构
+
+网络边缘：
+
+主机和服务器
+服务器一般在数据中心
+
+接入网络，物理介质：
+
+有线通信链路
+无线通信链路
+
+网络核心：
+
+路由器
+网络组成的网络
+
+
+
+
+
+
+
+几个名词的含义
+
+
+端系统：    
+就是网络应用程序的设备
+处在网络的边缘部分
+
+
+客户/服务器 （C/S架构）：
+客户请求，并提供的服务
+
+
+端对端模型：
+极少或者不采用专门的服务器
+在端系统之间交互
+
+
+
+
+如何将边缘设备连接到网络边缘的路由器呢？
+
+接入网络分类粗糙的分类：
+
+家庭接入网络
+机构接入网络
+广域无线接入网络
+
+
+带宽：
+衡量数据传输速率
+单位 
+Bps KBps MBps GBps
+bps kbps mbps gbps
+1 B = 8b
+
+家用接入网络非对称数字用户线路：（ADSL）
+基于电话线路的线路
+可达1 Mbps 上行速率 (目前典型 &lt; 512 kbps)
+ 可达 8 Mbps 下行速率 (目前典型 &lt; 4 Mbps)
+电缆接入网络（HFC）
+基于电视线路的接入网络
+通过频分复用，支持不同频段的传输
+可达2Mbps 上行速率, 30Mbps下行速率
+光 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/04/21/mac/" title="MacOS十大冷门软件推荐">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/mac.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MacOS十大冷门软件推荐"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/21/mac/" title="MacOS十大冷门软件推荐">MacOS十大冷门软件推荐</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-21T06:16:37.000Z" title="Created 2020-04-21 14:16:37">2020-04-21</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%82%BC%E4%B8%B9%E8%A3%85%E5%A4%87%E6%9D%82%E8%B0%88/">炼丹装备杂谈</a></span></div><div class="content">
+白用Mac三年了？居然不知道有这些好用的软件？绝不能错过10个冷门软件
+
+
+Cheat Sheet：https://cheatsheet-mac.en.softonic.com/mac
+
+
+这个软件主要是用于快捷键提示的。
+记住繁杂的快捷键往往很难，不过这个软件就能实时显示对应应用的快捷键。只需要按住Command键就可以显示现在对应窗口的所有快捷键啦
+
+
+
+欧陆词典：App Store 
+
+
+作为英文词典，为什么我会选择它呢？
+因为欧路词典的划词取词和智能取词是个亮点，方便用户查阅单词
+
+
+
+Magnet https://www.zhinin.com/magnet-mac.html
+
+
+窗口管理神器，在Mac上不用每次都长按窗口缩放键了
+而且有多种不同的布局
+
+
+
+Itsycal: https://www.mowglii.com/itsycal/
+
+
+Itsycal是个日历快捷方式，方便大家查看日历，而且能创建提醒且能整合到系统日历中
+
+
+
+Amphetamine: App Store 
+
+
+防休眠神器，安非他命（名字由来为一种兴奋剂）。
+
+
+
+AdGuard: App Store ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2020/04/20/internet1/" title="什么是Internet?">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="什么是Internet?"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/20/internet1/" title="什么是Internet?">什么是Internet?</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-20T14:59:38.000Z" title="Created 2020-04-20 22:59:38">2020-04-20</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">
+常常我们接触到Internet这个词，也就是英特网，那英特网到底是什么呢？
+
+其实关于如何定义因特网都没有一个确切的说法，所以我们通过侧面来描绘Internet
+在介绍因特网之前，我们应该了解，什么是计算机网络？
+
+
+计算机网络
+定义: 两台以上具有独立操作系统的计算机通过某些介质连接 成的相互共享软硬件资源的集合体。
+
+两大功能：计算机网络有两大功能：
+
+连通性
+共享性
+
+关于连通性，通过定义可以看出，就是计算机通过某种方式连在了一起
+关于共享性，我认为即是连通之意义所在，在于信息共享，沟通
+
+了解了计算机网络，我们来聊聊Internet。
+
+Internet总的来说，Internet就是：由网络构成的网络
+具有松散分层的特点
+
+同时有公共Internet和专用Intranet之分
+
+对于Internet，硬件和软件、提供的服务上，都很复杂，无法给出一个明确的定义
+ 我们只能对其具体构成和提供服务方面进行描述
+
+构成角度
+我个人的理解：Internet 就是使用计算机互连设备，通过通信链路，使用分组交换的原理，构成的系统
+
+三个方面：
+
+基础 ： 数以亿计的计算互联设备，包括：
+
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2020/04/20/internet/" title="Internet发展史">     <img class="post_bg" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Internet发展史"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/20/internet/" title="Internet发展史">Internet发展史</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2020-04-20T14:41:51.000Z" title="Created 2020-04-20 22:41:51">2020-04-20</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="content">Internet的发展史分组交换原理的早期发展与演化1961-1972
+
+
+
+1961: Kleinrock – 用排队理论成功的论证了分组交换方法在处理猝发通信量上的 有效性
+1964: Baran – 在军用网络上传输语音，研究使用分组交换技术
+1967: 美国国防部高级研究计划署DARPA始建ARPAnet
+1969: 第1台ARPAnet接口消息处理机IMP研制并安装使用
+1972:
+Robert Kahn首次公开演示ARPAnet
+制订第1个主机到主机的协议NCP (Network Control Protocol) • 研制第1个电子邮件程序
+ ARPAnet 增长到15个节点
+
+
+
+网际互连与新兴的专属网络1972 - 1980
+
+
+
+1970: ALOHAnet微波网络出现在Hawaii
+
+1973: Robert Metcalfe’s PhD论文提出了
+Ethernet
+
+1974: Vinton Cerf and Robert Kahn
+–网际互连的网络体系结构
+
+late70’s: 专属网络体系结构: DECnet, SNA, XNS
+
+late70’s: 固定长 ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/3/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#content-inner">5</a><a class="page-number" href="/page/6/#content-inner">6</a><a class="extend next" rel="next" href="/page/5/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">刘训灼</div><div class="author-info__description">Hi! 我是刘训灼，这里是我技术分享的地方</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mixdeers@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2020/05/28/busy-week/" title="Crazy Weekdays：疯狂的一周"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aboutme.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Crazy Weekdays：疯狂的一周"/></a><div class="content"><a class="title" href="/2020/05/28/busy-week/" title="Crazy Weekdays：疯狂的一周">Crazy Weekdays：疯狂的一周</a><time datetime="2020-05-28T04:46:48.000Z" title="Created 2020-05-28 12:46:48">2020-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/26/hexo-coder/" title="Hexo主题-CoderV1.0发布啦"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/hexocoder.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo主题-CoderV1.0发布啦"/></a><div class="content"><a class="title" href="/2020/05/26/hexo-coder/" title="Hexo主题-CoderV1.0发布啦">Hexo主题-CoderV1.0发布啦</a><time datetime="2020-05-26T01:42:10.000Z" title="Created 2020-05-26 09:42:10">2020-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/24/AI-stack/" title="人工智能该如何零基础入门👀？"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aiiia.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="人工智能该如何零基础入门👀？"/></a><div class="content"><a class="title" href="/2020/05/24/AI-stack/" title="人工智能该如何零基础入门👀？">人工智能该如何零基础入门👀？</a><time datetime="2020-05-24T03:41:42.000Z" title="Created 2020-05-24 11:41:42">2020-05-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/22/markov-python/" title="✍️动手实现Markov-Chain"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/markov3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现Markov-Chain"/></a><div class="content"><a class="title" href="/2020/05/22/markov-python/" title="✍️动手实现Markov-Chain">✍️动手实现Markov-Chain</a><time datetime="2020-05-22T03:23:56.000Z" title="Created 2020-05-22 11:23:56">2020-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/20/python-nn/" title="✍️动手实现NeuralNetwork"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/dpnn.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现NeuralNetwork"/></a><div class="content"><a class="title" href="/2020/05/20/python-nn/" title="✍️动手实现NeuralNetwork">✍️动手实现NeuralNetwork</a><time datetime="2020-05-20T15:57:18.000Z" title="Created 2020-05-20 23:57:18">2020-05-20</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            <a class="card-more-btn" href="/categories/" title="More">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Coder%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/"><span class="card-category-list-name">Coder必知必会</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/"><span class="card-category-list-name">Engineer童子功</span><span class="card-category-list-count">17</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/NLPer%E7%82%BC%E4%B8%B9%E4%B9%8B%E6%97%85/"><span class="card-category-list-name">NLPer炼丹之旅</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%97%A5%E5%B8%B8/"><span class="card-category-list-name">日常</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/"><span class="card-category-list-name">机器学习之旅</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8E%A2%E7%B4%A2%E4%B9%8B%E8%B7%AF/"><span class="card-category-list-name">深度学习探索之路</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%82%BC%E4%B8%B9%E8%A3%85%E5%A4%87%E6%9D%82%E8%B0%88/"><span class="card-category-list-name">炼丹装备杂谈</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%88%AC%E8%99%AB%E9%82%A3%E4%BA%9B%E5%B0%8F%E4%BA%8B/"><span class="card-category-list-name">爬虫那些小事</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/AI%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" style="font-size: 1.1em; color: #999">AI学习路线</a> <a href="/tags/Fun/" style="font-size: 1.1em; color: #999">Fun</a> <a href="/tags/GitHub/" style="font-size: 1.1em; color: #999">GitHub</a> <a href="/tags/Git%E5%B7%A5%E4%BD%9C%E6%B5%81/" style="font-size: 1.1em; color: #999">Git工作流</a> <a href="/tags/Git%E6%95%99%E7%A8%8B/" style="font-size: 1.26em; color: #999fa8">Git教程</a> <a href="/tags/Hexo%E4%B8%BB%E9%A2%98/" style="font-size: 1.1em; color: #999">Hexo主题</a> <a href="/tags/JSON/" style="font-size: 1.18em; color: #999ca1">JSON</a> <a href="/tags/Jupyter-Notebook/" style="font-size: 1.26em; color: #999fa8">Jupyter Notebook</a> <a href="/tags/Keras/" style="font-size: 1.1em; color: #999">Keras</a> <a href="/tags/LSTM/" style="font-size: 1.1em; color: #999">LSTM</a> <a href="/tags/Linux/" style="font-size: 1.1em; color: #999">Linux</a> <a href="/tags/MIR/" style="font-size: 1.1em; color: #999">MIR</a> <a href="/tags/MacOS/" style="font-size: 1.1em; color: #999">MacOS</a> <a href="/tags/Markdown%E6%95%99%E7%A8%8B/" style="font-size: 1.18em; color: #999ca1">Markdown教程</a> <a href="/tags/Markov%E9%93%BE/" style="font-size: 1.1em; color: #999">Markov链</a> <a href="/tags/Oh-my-zsh/" style="font-size: 1.1em; color: #999">Oh_my_zsh</a> <a href="/tags/Python/" style="font-size: 1.18em; color: #999ca1">Python</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/Shell/" style="font-size: 1.1em; color: #999">Shell</a> <a href="/tags/TensorFlow/" style="font-size: 1.1em; color: #999">TensorFlow</a> <a href="/tags/Vim/" style="font-size: 1.1em; color: #999">Vim</a> <a href="/tags/Zsh/" style="font-size: 1.1em; color: #999">Zsh</a> <a href="/tags/iTerm2/" style="font-size: 1.1em; color: #999">iTerm2</a> <a href="/tags/one-hot%E6%A8%A1%E5%9E%8B/" style="font-size: 1.1em; color: #999">one-hot模型</a> <a href="/tags/tmux/" style="font-size: 1.1em; color: #999">tmux</a> <a href="/tags/word2vec/" style="font-size: 1.1em; color: #999">word2vec</a> <a href="/tags/%E4%B9%A6%E7%B1%8D/" style="font-size: 1.1em; color: #999">书籍</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 1.26em; color: #999fa8">人工智能</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/" style="font-size: 1.26em; color: #999fa8">代码管理</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/" style="font-size: 1.1em; color: #999">信息论</a> <a href="/tags/%E5%85%B3%E4%BA%8E%E6%88%91/" style="font-size: 1.1em; color: #999">关于我</a> <a href="/tags/%E5%88%86%E4%BA%AB/" style="font-size: 1.26em; color: #999fa8">分享</a> <a href="/tags/%E5%88%B7%E9%A2%98/" style="font-size: 1.1em; color: #999">刷题</a> <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 1.1em; color: #999">卷积神经网络</a> <a href="/tags/%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C/" style="font-size: 1.34em; color: #99a3b0">团队协作</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" style="font-size: 1.5em; color: #99a9bf">学习总结</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/" style="font-size: 1.1em; color: #999">学习方法</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 1.26em; color: #999fa8">工具</a> <a href="/tags/%E5%BF%83%E6%83%85/" style="font-size: 1.1em; color: #999">心情</a> <a href="/tags/%E5%BF%85%E4%BC%9A%E7%9A%84%E5%B7%A5%E5%85%B7/" style="font-size: 1.42em; color: #99a6b7">必会的工具</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/05/"><span class="card-archive-list-date">May 2020</span><span class="card-archive-list-count">14</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/04/"><span class="card-archive-list-date">April 2020</span><span class="card-archive-list-count">31</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/03/"><span class="card-archive-list-date">March 2020</span><span class="card-archive-list-count">6</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2018/10/"><span class="card-archive-list-date">October 2018</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">52</div></div><div class="webinfo-item"><div class="item-name">Run time :</div><div class="item-count" id="runtimeshow" data-publishDate="2018-08-31T16:00:00.000Z"></div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2021-06-17T07:08:34.389Z"></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/dmoon.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 刘训灼</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function subtitleType () {
+  getScript('https://sdk.jinrishici.com/v2/browser/jinrishici.js').then(() => {
+    jinrishici.load(function (result) {
+      if (true) {
+        var sub = "".length == 0 ? new Array() : "".split(',')
+        var content = result.data.content
+        var both = sub.unshift(content)
+        var typed = new Typed('#subtitle', {
+          strings: sub,
+          startDelay: 300,
+          typeSpeed: 150,
+          loop: true,
+          backSpeed: 50,
+        })
+      } else {
+        document.getElementById('subtitle').innerHTML = result.data.content
+      }
+    })
+  })
+}
+
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}
+</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

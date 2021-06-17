@@ -1,0 +1,418 @@
+<!DOCTYPE html><html lang="zh" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>详解P2P技术 | 比特流技术</title><meta name="keywords" content="计算机基础,学习总结"><meta name="author" content="刘训灼"><meta name="copyright" content="刘训灼"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="本文讨论一下去中心化的架构，P2P的几种架构，比较硬核">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详解P2P技术">
+<meta property="og:url" content="https://www.liuxunzhuo.com/2020/04/24/internet14/index.html">
+<meta property="og:site_name" content="比特流技术">
+<meta property="og:description" content="本文讨论一下去中心化的架构，P2P的几种架构，比较硬核">
+<meta property="og:locale">
+<meta property="og:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png">
+<meta property="article:published_time" content="2020-04-24T15:59:57.000Z">
+<meta property="article:modified_time" content="2020-05-20T07:12:22.000Z">
+<meta property="article:author" content="刘训灼">
+<meta property="article:tag" content="计算机基础">
+<meta property="article:tag" content="学习总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png"><link rel="shortcut icon" href="https://picreso.oss-cn-beijing.aliyuncs.com/favicon.png"><link rel="canonical" href="https://www.liuxunzhuo.com/2020/04/24/internet14/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '详解P2P技术',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-05-20 15:12:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">比特流技术</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">详解P2P技术</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-04-24T15:59:57.000Z" title="Created 2020-04-24 23:59:57">2020-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-05-20T07:12:22.000Z" title="Updated 2020-05-20 15:12:22">2020-05-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="详解P2P技术"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>P2P = Peer to Peer </p>
+<p>现在P2P也有很多不同架构，以下是常见的一些P2P架构</p>
+</blockquote>
+<h2 id="纯P2P架构"><a href="#纯P2P架构" class="headerlink" title="纯P2P架构"></a>纯P2P架构</h2><ul>
+<li>没有总是在线的服务器</li>
+<li>任意端系统之间直接通信</li>
+<li>对等方之间可以间断连接并可 以改变IP地址</li>
+</ul>
+<p>例子:</p>
+<ul>
+<li><p>文件分发 </p>
+</li>
+<li><p>流媒体</p>
+</li>
+<li><p>VoIP</p>
+</li>
+</ul>
+<blockquote>
+<p>复杂应用纯P2P无法实现</p>
+</blockquote>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p2p.png"></p>
+<hr>
+<h2 id="P2P-集中式目录"><a href="#P2P-集中式目录" class="headerlink" title="P2P: 集中式目录"></a><strong>P2P:</strong> <strong>集中式目录</strong></h2><blockquote>
+<p>Napster公司首先设计，由中央集中服务器管理</p>
+</blockquote>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p1.png"></p>
+<ol>
+<li>当对等方启动时，它通知目录 服务器以下信息</li>
+</ol>
+<ul>
+<li><p>IP地址</p>
+</li>
+<li><p>可供共享的对象名称</p>
+</li>
+</ul>
+<ol start="2">
+<li>Alice查询文件“Hey Jude” 3) Alice 向Bob请求文件</li>
+</ol>
+<blockquote>
+<p> 通过架构我们可以看到一些问题</p>
+</blockquote>
+<h3 id="集中式目录问题"><a href="#集中式目录问题" class="headerlink" title="集中式目录问题"></a><strong>集中式目录</strong>问题</h3><ul>
+<li>单点故障 </li>
+<li>性能瓶颈 </li>
+<li>侵犯版权</li>
+</ul>
+<blockquote>
+<p> 文件传输是分散的， 但是定位内容的过 程是高度集中的</p>
+</blockquote>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p2.png"></p>
+<hr>
+<h2 id="Gnutella-使用洪泛法查询"><a href="#Gnutella-使用洪泛法查询" class="headerlink" title="Gnutella(使用洪泛法查询)"></a>Gnutella(使用洪泛法查询)</h2><blockquote>
+<p>类似于广播，范围有限，发出请求后，能响应的服务器回应</p>
+</blockquote>
+<ul>
+<li><p>全分布</p>
+</li>
+<li><p>没有集中式服务器</p>
+</li>
+<li><p>公共域协议</p>
+</li>
+<li><p>许多Gnutella客户机实现Gnutella协议</p>
+</li>
+</ul>
+<p>覆盖网络：</p>
+<ul>
+<li><p>如果对等方X和Y维护了一条TCP连接，则说X和Y之间有一条边</p>
+</li>
+<li><p>所有活跃的对等方和边组成覆盖网络</p>
+</li>
+<li><p>边不是物理通信链路</p>
+</li>
+<li><p>给定对等方连接的覆盖网络路径中的节点少于10个,即TTL小于10</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p3.png"></p>
+<blockquote>
+<p>查询报文在已有的TCP连接上发送</p>
+<p>对等方转发报文</p>
+<p>QueryHit 报文按反向路径传送</p>
+</blockquote>
+<h3 id="Gnutella-加入对等方"><a href="#Gnutella-加入对等方" class="headerlink" title="Gnutella: 加入对等方"></a><strong>Gnutella:</strong> 加入对等方</h3><ul>
+<li><p>加入对等方X必须发现在Gnutella网络中的其他对等方:使用对等方列表 。</p>
+</li>
+<li><p>X试图与该列表上的对等方建立一条TCP连接，直到与Y创建一条连接。</p>
+</li>
+<li><p>向Y发送一个Ping报文;Y转发该Ping报文。</p>
+</li>
+<li><p>所有的对等方接收Ping报文并响应一个Pong报 文。</p>
+</li>
+<li><p>X接收到许多Pong报文。然后能同某些其他对等 方建立TCP连接。</p>
+</li>
+</ul>
+<h3 id="Gnutella-对等方离开"><a href="#Gnutella-对等方离开" class="headerlink" title="Gnutella: 对等方离开"></a><strong>Gnutella:</strong> <strong>对等方离开</strong></h3><ul>
+<li><p>主动离开:离开接点的所有对等方都会刷新自身 的激活对等方列表,并开始与列表中的新的对等 方建立连接</p>
+</li>
+<li><p>断网:发送信息的时候对等方没有响应,则表明对 等方离开,节点刷新自身的激活对等方列表,并开 始与列表中的新的对等方建立连接</p>
+</li>
+</ul>
+<hr>
+<h2 id="KaZaA"><a href="#KaZaA" class="headerlink" title="KaZaA"></a><strong>KaZaA</strong></h2><blockquote>
+<p>纯P2P的改进，超级节点技术</p>
+</blockquote>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p.png"></p>
+<ul>
+<li><p>每个对等方要不被指派 为组长，要不被指派给一个组长</p>
+<ul>
+<li><p>对等方和组长之间建立 TCP连接</p>
+</li>
+<li><p>组长之间建立TCP连接</p>
+</li>
+</ul>
+</li>
+<li><p>组长维护它的子对等方 共享的内容</p>
+</li>
+</ul>
+<h3 id="过程："><a href="#过程：" class="headerlink" title="过程："></a>过程：</h3><ul>
+<li>每个文件有文件的散列码标识</li>
+<li>客户机送向组长发送关键词的查询</li>
+<li>组长响应匹配</li>
+<li>逐项匹配: <ul>
+<li>元数据</li>
+<li>散列值</li>
+<li>IP地址</li>
+</ul>
+</li>
+<li>如果组长转发查询给其他组长则其他组长响应匹 配</li>
+<li>客户端选择要下载的文件</li>
+</ul>
+<h3 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h3><ul>
+<li><p>请求排队:限制对等方并行上载数量，新的请求进行排队。</p>
+</li>
+<li><p>激励优先权:根据不同的上载下载比例优先服务贡献大者。</p>
+</li>
+<li><p>并行下载:将一个文件分成若干段，从多个对等方并行下载。</p>
+</li>
+</ul>
+<hr>
+<h2 id="P2P文件分发：BitTorrent"><a href="#P2P文件分发：BitTorrent" class="headerlink" title="P2P文件分发：BitTorrent"></a><strong>P2P</strong>文件分发：<strong>BitTorrent</strong></h2><p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p5.png"></p>
+<ul>
+<li><p>BitTorrent是一种用于文件分发的流行P2P协议。</p>
+</li>
+<li><p>参与一个特定文件分发的所有对等方的集合被称为一个洪流 (torrent)。</p>
+</li>
+<li><p>一个洪流中的对等方彼此下载等长度的文件块(chunk)，典型 块长度为256KB。</p>
+</li>
+</ul>
+<p>追踪器tracker服务器</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/bitt.png"></p>
+<h2 id="P2P文件分发流程"><a href="#P2P文件分发流程" class="headerlink" title="P2P文件分发流程"></a><strong>P2P</strong>文件分发流程</h2><ul>
+<li>对等方加入 torrent:<ul>
+<li>没有文件块，但会随着时间流逝从其它对等方处累积文件     块</li>
+<li>在tracker处注册，取得对等方列表，连到所有对等方的 一个子集(邻居)</li>
+</ul>
+</li>
+<li>在下载的同时给其它对等方上传文件块 </li>
+<li>对等方可能改变和其交换文件块的对象 </li>
+<li>对等方会不断进入或者离开</li>
+<li>一旦某对等方下载完了整个文件，它可以离开(自 私)或者继续留在torrent系统里(无私)</li>
+</ul>
+<h2 id="BitTorrent-请求、发送"><a href="#BitTorrent-请求、发送" class="headerlink" title="BitTorrent:请求、发送"></a>BitTorrent:请求、发送</h2><h3 id="请求文件块"><a href="#请求文件块" class="headerlink" title="请求文件块"></a><strong>请求文件块</strong></h3><ul>
+<li><p>在任何给定的时刻，不同的对等方拥有不同的文件块子集</p>
+</li>
+<li><p>每个对等方会周期性的询 问其它每个它连接的对等方当前所拥有的文件块列 表</p>
+</li>
+<li><p>对等方将请求下载最稀缺的文件块</p>
+</li>
+</ul>
+<h3 id="发送文件块-tit-for-tat-一报还一报"><a href="#发送文件块-tit-for-tat-一报还一报" class="headerlink" title="**发送文件块: tit-for-**tat(一报还一报)"></a>**发送文件块: tit-for-**tat(一报还一报)</h3><ul>
+<li><p>Alice发送文件块的对象是 所有邻居中向自己发送速率 最快的4个</p>
+<ul>
+<li><p>其它邻居被阻塞</p>
+</li>
+<li><p>每10秒重新计算速率</p>
+</li>
+</ul>
+</li>
+<li><p>每30秒，随机选择一个其 他邻居，发送文件块</p>
+</li>
+</ul>
+<hr>
+<h2 id="DHT-分布式Hash表"><a href="#DHT-分布式Hash表" class="headerlink" title="DHT(分布式Hash表)"></a><strong>DHT(<strong>分布式</strong>Hash</strong>表)</h2><blockquote>
+<p> DHT: 一个分布式的P2P数据库</p>
+</blockquote>
+<ul>
+<li>数据库由许多(key,value)((键, 值)) 对构成。例如:<ul>
+<li>key: 社保号; value: 人名</li>
+<li>key: 电影名称; value: IP地址</li>
+</ul>
+</li>
+<li>所有(key, value) 对被分发到成千上万的对等方用户群中</li>
+<li>一个对等方利用key来查询DHT</li>
+<li>DHT返回与之匹配的value</li>
+<li>对等方还可以插入(key, value)对</li>
+</ul>
+<h3 id="怎样把键值分配给对等方"><a href="#怎样把键值分配给对等方" class="headerlink" title="怎样把键值分配给对等方?"></a><strong>怎样把键值分配给对等方</strong>?</h3><h4 id="核心问题"><a href="#核心问题" class="headerlink" title="核心问题:"></a>核心问题:</h4><ul>
+<li>分配 (key, value) 对给各对等方</li>
+</ul>
+<h4 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想:"></a>基本思想:</h4><ul>
+<li>把每个key转化成一个整数</li>
+<li>给每个对等方分配一个整数标识符</li>
+<li>把 (key,value) 对分配给标识符离key最近的 那个对等方</li>
+</ul>
+<h3 id="DHT-标识符"><a href="#DHT-标识符" class="headerlink" title="DHT 标识符"></a><strong>DHT</strong> 标识符</h3><ul>
+<li>给每个对等方分配一个[0,2n-1]之间的整数标识符，n为某给定值.<ul>
+<li>每个标识符由 <em>n</em> 比特构成.</li>
+</ul>
+</li>
+<li>需要每个key也在同样的范围内</li>
+<li>为得到整数key,将原key做hash<ul>
+<li>例如*,* key = hash(“Led Zeppelin IV”) </li>
+<li>这就是为什么叫做分布式hash表的原因</li>
+</ul>
+</li>
+</ul>
+<h3 id="将key分配给对等方"><a href="#将key分配给对等方" class="headerlink" title="将key分配给对等方"></a><strong>将</strong>key分配给对等方</h3><p>规则:把key分配给具有最邻近ID的对等方.</p>
+<ul>
+<li>为方便起见: 最临近被定义为该key的直接后继 (immediate successor )</li>
+<li> 例如:</li>
+<li><em>n</em>=4; peers: 1,3,4,5,8,10,12,14;</li>
+<li>key = 13, then successor peer = 14 </li>
+<li>key = 15, then successor peer = 1</li>
+</ul>
+<h2 id="环形DHT"><a href="#环形DHT" class="headerlink" title="环形DHT"></a>环形DHT</h2><p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p6.png"></p>
+<ul>
+<li><p>每个对等方仅和其直接后继和直接前任( predecessor)联系. </p>
+</li>
+<li><p>“覆盖网络”</p>
+</li>
+</ul>
+<p>当有N个对等方时，为找 到负责的键，发送消息数 量的负责度是O(N)</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p7.png"></p>
+<h2 id="带捷径的环形DHT"><a href="#带捷径的环形DHT" class="headerlink" title="带捷径的环形DHT"></a><strong>带捷径的环形</strong>DHT</h2><ul>
+<li><p>每个对等方知晓直接前任、后继以及捷径方的IP</p>
+</li>
+<li><p>本例中，将消息数从6减至2</p>
+</li>
+<li><p>DHT可以设计为每个对等方的邻居和每个请求的报文数均为<em>O(log N)</em></p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p8.png"></p>
+<h2 id="对等方扰动"><a href="#对等方扰动" class="headerlink" title="对等方扰动"></a><strong>对等方扰动</strong></h2><p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/p2p9.png"></p>
+<ul>
+<li>对等方可能进入或者离去 </li>
+<li>对等方需要知晓它后面两个后继的地址</li>
+<li>每个对等方周期性的ping这两个后继以 检查它们的存活性</li>
+<li>如果直接后继离开了，则选择它的下一 个后继作为直接后继</li>
+</ul>
+<blockquote>
+<p>例如: peer 5离开</p>
+</blockquote>
+<ul>
+<li>peer 4检测到5的离开，将8当作其直接后继，并且问 8它的直接后继是谁(10)，然后将10当作其第二后继。 </li>
+<li>如果编号为13的peer要加入怎么办? 后续还有很多问题，篇幅有限，感兴趣可以下来了解。</li>
+</ul>
+<blockquote>
+<p>希望你能通过这篇文章了解到现在网络上常见的几个P2P的模式。</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">刘训灼</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://www.liuxunzhuo.com/2020/04/24/internet14/">https://www.liuxunzhuo.com/2020/04/24/internet14/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a></div><div class="post_share"><div class="social-share" data-image="https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/24/boomfilter/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bf.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">BloomFilter原理与Python实现</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/24/internet13/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/dns.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Internet的目录DNS</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2020/04/20/internet/" title="Internet发展史"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-20</div><div class="title">Internet发展史</div></div></a></div><div><a href="/2020/04/20/internet1/" title="什么是Internet?"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-20</div><div class="title">什么是Internet?</div></div></a></div><div><a href="/2020/04/23/internet10/" title="关于Web缓存"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/proxy.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-23</div><div class="title">关于Web缓存</div></div></a></div><div><a href="/2020/04/23/internet11/" title="浅谈FTP文件传输协议"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/ftp3.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-23</div><div class="title">浅谈FTP文件传输协议</div></div></a></div><div><a href="/2020/04/23/internet12/" title="因特网中的电子邮件SMTP,POP3,IMAP"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/smtp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-23</div><div class="title">因特网中的电子邮件SMTP,POP3,IMAP</div></div></a></div><div><a href="/2020/04/24/internet13/" title="Internet的目录DNS"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/dns.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-24</div><div class="title">Internet的目录DNS</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">刘训灼</div><div class="author-info__description">Hi! 我是刘训灼，这里是我技术分享的地方</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:mixdeers@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%AFP2P%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">纯P2P架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#P2P-%E9%9B%86%E4%B8%AD%E5%BC%8F%E7%9B%AE%E5%BD%95"><span class="toc-number">2.</span> <span class="toc-text">P2P: 集中式目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E4%B8%AD%E5%BC%8F%E7%9B%AE%E5%BD%95%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text">集中式目录问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gnutella-%E4%BD%BF%E7%94%A8%E6%B4%AA%E6%B3%9B%E6%B3%95%E6%9F%A5%E8%AF%A2"><span class="toc-number">3.</span> <span class="toc-text">Gnutella(使用洪泛法查询)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gnutella-%E5%8A%A0%E5%85%A5%E5%AF%B9%E7%AD%89%E6%96%B9"><span class="toc-number">3.1.</span> <span class="toc-text">Gnutella: 加入对等方</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gnutella-%E5%AF%B9%E7%AD%89%E6%96%B9%E7%A6%BB%E5%BC%80"><span class="toc-number">3.2.</span> <span class="toc-text">Gnutella: 对等方离开</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KaZaA"><span class="toc-number">4.</span> <span class="toc-text">KaZaA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-number">4.1.</span> <span class="toc-text">过程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9%EF%BC%9A"><span class="toc-number">4.2.</span> <span class="toc-text">特点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#P2P%E6%96%87%E4%BB%B6%E5%88%86%E5%8F%91%EF%BC%9ABitTorrent"><span class="toc-number">5.</span> <span class="toc-text">P2P文件分发：BitTorrent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#P2P%E6%96%87%E4%BB%B6%E5%88%86%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">P2P文件分发流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BitTorrent-%E8%AF%B7%E6%B1%82%E3%80%81%E5%8F%91%E9%80%81"><span class="toc-number">7.</span> <span class="toc-text">BitTorrent:请求、发送</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E6%96%87%E4%BB%B6%E5%9D%97"><span class="toc-number">7.1.</span> <span class="toc-text">请求文件块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%96%87%E4%BB%B6%E5%9D%97-tit-for-tat-%E4%B8%80%E6%8A%A5%E8%BF%98%E4%B8%80%E6%8A%A5"><span class="toc-number">7.2.</span> <span class="toc-text">**发送文件块: tit-for-**tat(一报还一报)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DHT-%E5%88%86%E5%B8%83%E5%BC%8FHash%E8%A1%A8"><span class="toc-number">8.</span> <span class="toc-text">DHT(分布式Hash表)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%8E%E6%A0%B7%E6%8A%8A%E9%94%AE%E5%80%BC%E5%88%86%E9%85%8D%E7%BB%99%E5%AF%B9%E7%AD%89%E6%96%B9"><span class="toc-number">8.1.</span> <span class="toc-text">怎样把键值分配给对等方?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="toc-number">8.1.1.</span> <span class="toc-text">核心问题:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="toc-number">8.1.2.</span> <span class="toc-text">基本思想:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DHT-%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="toc-number">8.2.</span> <span class="toc-text">DHT 标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86key%E5%88%86%E9%85%8D%E7%BB%99%E5%AF%B9%E7%AD%89%E6%96%B9"><span class="toc-number">8.3.</span> <span class="toc-text">将key分配给对等方</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%BD%A2DHT"><span class="toc-number">9.</span> <span class="toc-text">环形DHT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6%E6%8D%B7%E5%BE%84%E7%9A%84%E7%8E%AF%E5%BD%A2DHT"><span class="toc-number">10.</span> <span class="toc-text">带捷径的环形DHT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E7%AD%89%E6%96%B9%E6%89%B0%E5%8A%A8"><span class="toc-number">11.</span> <span class="toc-text">对等方扰动</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2020/05/28/busy-week/" title="Crazy Weekdays：疯狂的一周"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aboutme.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Crazy Weekdays：疯狂的一周"/></a><div class="content"><a class="title" href="/2020/05/28/busy-week/" title="Crazy Weekdays：疯狂的一周">Crazy Weekdays：疯狂的一周</a><time datetime="2020-05-28T04:46:48.000Z" title="Created 2020-05-28 12:46:48">2020-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/26/hexo-coder/" title="Hexo主题-CoderV1.0发布啦"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/hexocoder.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo主题-CoderV1.0发布啦"/></a><div class="content"><a class="title" href="/2020/05/26/hexo-coder/" title="Hexo主题-CoderV1.0发布啦">Hexo主题-CoderV1.0发布啦</a><time datetime="2020-05-26T01:42:10.000Z" title="Created 2020-05-26 09:42:10">2020-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/24/AI-stack/" title="人工智能该如何零基础入门👀？"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aiiia.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="人工智能该如何零基础入门👀？"/></a><div class="content"><a class="title" href="/2020/05/24/AI-stack/" title="人工智能该如何零基础入门👀？">人工智能该如何零基础入门👀？</a><time datetime="2020-05-24T03:41:42.000Z" title="Created 2020-05-24 11:41:42">2020-05-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/22/markov-python/" title="✍️动手实现Markov-Chain"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/markov3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现Markov-Chain"/></a><div class="content"><a class="title" href="/2020/05/22/markov-python/" title="✍️动手实现Markov-Chain">✍️动手实现Markov-Chain</a><time datetime="2020-05-22T03:23:56.000Z" title="Created 2020-05-22 11:23:56">2020-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/05/20/python-nn/" title="✍️动手实现NeuralNetwork"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/dpnn.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现NeuralNetwork"/></a><div class="content"><a class="title" href="/2020/05/20/python-nn/" title="✍️动手实现NeuralNetwork">✍️动手实现NeuralNetwork</a><time datetime="2020-05-20T15:57:18.000Z" title="Created 2020-05-20 23:57:18">2020-05-20</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 刘训灼</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
