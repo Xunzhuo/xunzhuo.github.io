@@ -1,0 +1,412 @@
+<!DOCTYPE html><html lang="zh" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Internet的目录DNS | 比特流技术</title><meta name="keywords" content="计算机基础,学习总结"><meta name="author" content="刘训灼"><meta name="copyright" content="刘训灼"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="本文谈了谈 DNS域名系统，这个极其重要的网络应用，网站域名和服务器ip的映射关系就是DNS提供的，假设你访问我的网站没有DNS服务的话，你可能得输入长而无规律的IPv4地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Internet的目录DNS">
+<meta property="og:url" content="https://liuxunzhuo.com/internet13/index.html">
+<meta property="og:site_name" content="比特流技术">
+<meta property="og:description" content="本文谈了谈 DNS域名系统，这个极其重要的网络应用，网站域名和服务器ip的映射关系就是DNS提供的，假设你访问我的网站没有DNS服务的话，你可能得输入长而无规律的IPv4地址">
+<meta property="og:locale">
+<meta property="og:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/dns.png">
+<meta property="article:published_time" content="2020-04-24T15:59:56.000Z">
+<meta property="article:modified_time" content="2020-05-20T07:12:19.000Z">
+<meta property="article:author" content="刘训灼">
+<meta property="article:tag" content="计算机基础">
+<meta property="article:tag" content="学习总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/dns.png"><link rel="shortcut icon" href="https://picreso.oss-cn-beijing.aliyuncs.com/favicon.png"><link rel="canonical" href="https://liuxunzhuo.com/internet13/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Internet的目录DNS',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-05-20 15:12:19'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/dns.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">比特流技术</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Internet的目录DNS</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-04-24T15:59:56.000Z" title="Created 2020-04-24 23:59:56">2020-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-05-20T07:12:19.000Z" title="Updated 2020-05-20 15:12:19">2020-05-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Engineer%E7%AB%A5%E5%AD%90%E5%8A%9F/">Engineer童子功</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Internet的目录DNS"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="DNS体系介绍"><a href="#DNS体系介绍" class="headerlink" title="DNS体系介绍"></a>DNS体系介绍</h1><h2 id="为什么要有DNS"><a href="#为什么要有DNS" class="headerlink" title="为什么要有DNS"></a>为什么要有DNS</h2><blockquote>
+<p> DNS = Domain Name System</p>
+</blockquote>
+<p>在Internet中，主机和路由器都有一个标识符： IP地址，这是为了在网络层服务（后面会单独写文章解释）</p>
+<p>和人对比，ip类似于人的身份证号</p>
+<p>但是我们彼此称呼的时候，张三 叫 李四 不可能叫他 511024XXXXXX身份证号吧，而是直呼名字，那在互联网中，这些网络设备，也可以拥有名字，这就是域名，也叫主机名</p>
+<p>DNS 就负责建立 IP地址和主机名之间建立映射关系，负责两者转换。</p>
+<h2 id="DNS提供的功能"><a href="#DNS提供的功能" class="headerlink" title="DNS提供的功能"></a>DNS提供的功能</h2><p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/dns2.png"></p>
+<blockquote>
+<p>DNS是通过专门的服务器实现它的功能，称为DNS服务器。</p>
+</blockquote>
+<ul>
+<li><p>主机名到IP地址的转换  </p>
+</li>
+<li><p>主机别名</p>
+</li>
+<li><p>一个主机可以有一个规范主机名和多个主机别名</p>
+</li>
+<li><p>邮件服务器别名 </p>
+</li>
+<li><p>负载分配</p>
+<ul>
+<li><p>DNS实现冗余服务器:一个IP地址 集合可以对应于同一个规范主机名。</p>
+<p>（比如你访问的baidu.com，访问量巨大，不可能让单一的主机来负责请求，一般是很多个主机映射到一个域名上面，负载均衡）</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="DNS特点"><a href="#DNS特点" class="headerlink" title="DNS特点"></a>DNS特点</h2><ul>
+<li><p>分布式数据库: 一个由分层 DNS服务器实现的分布式数据库</p>
+</li>
+<li><p>应用层协议:DNS服务器实现域名转换 (域名/地址转换)、</p>
+</li>
+</ul>
+<blockquote>
+<p><code>为什么不集中式DNS?</code></p>
+<ul>
+<li><p>单点故障 导致DNS服务瘫痪 </p>
+</li>
+<li><p>巨大访问量</p>
+</li>
+<li><p>远距离集中式数据库维护</p>
+</li>
+<li><p>不可扩展!</p>
+</li>
+</ul>
+</blockquote>
+<p>分层结构：</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/dns3.png"></p>
+<p><code>客户机怎样决定主机名www.amazon.com的IP地址?</code></p>
+<blockquote>
+<p>从后往前查询</p>
+</blockquote>
+<ol>
+<li><p>客户机查询根服务器得到com DNS服务器 </p>
+</li>
+<li><p>客户机查询com DNS服务器得到amazon.comDNS服务器</p>
+</li>
+<li><p>客户机查询amazon.comDNS服务器得到 <a target="_blank" rel="noopener" href="http://www.amazon.com/">www.amazon.com</a>  的IP地址</p>
+</li>
+</ol>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/dns.png"></p>
+<h2 id="顶级域-TLD-服务器和权威DNS服务器"><a href="#顶级域-TLD-服务器和权威DNS服务器" class="headerlink" title="顶级域(TLD)服务器和权威DNS服务器"></a><strong>顶级域(TLD)服务器和权威</strong>DNS服务器</h2><ul>
+<li><p><code> 顶级域服务器</code>(top-level domain servers): </p>
+<blockquote>
+<p> 13个顶级域名服务器和镜像服务器 一共全球 500多个</p>
+</blockquote>
+<ul>
+<li>负责顶级域名 com, org, net, edu, etc, 和所有国家的顶级域名 uk, fr, ca, jp.</li>
+<li> Network solutions 公司维护com顶级域的TLD服务器</li>
+<li>Educause 公司维护edu顶级域的 TLD服务器</li>
+</ul>
+</li>
+<li><p><code>权威DNS服务器</code>(authoritative DNS servers): 在因特网上具有公共可访问主机 (如Web服务器和邮件服务器)的每个组织机构必须提供公共可访问的DNS记录，这些记录将这些主机的名字映射为IP地址。</p>
+<ul>
+<li>组织机构的权威DNS服务器负 责保存这些DNS记录。</li>
+<li>多数大学和公司维护它们的基本权威DNS服务器</li>
+</ul>
+</li>
+</ul>
+<h2 id="本地DNS服务器"><a href="#本地DNS服务器" class="headerlink" title="本地DNS服务器"></a>本地DNS服务器</h2><blockquote>
+<p>相当于一个本地代理</p>
+</blockquote>
+<ul>
+<li><p>严格来说不属于该服务器的层次结构</p>
+</li>
+<li><p>每个ISP(如居民区ISP、公司、大学)都有一 个本地DNS</p>
+<ul>
+<li>也叫默认服务器</li>
+</ul>
+</li>
+<li><p>当主机发出DNS请求时，该请求被发往本地DNS服务器。</p>
+</li>
+<li><p>起着代理的作用，转发请求到层次结构中。</p>
+</li>
+</ul>
+<hr>
+<h1 id="DNS工作原理"><a href="#DNS工作原理" class="headerlink" title="DNS工作原理"></a>DNS工作原理</h1><h2 id="DNS-查询方法"><a href="#DNS-查询方法" class="headerlink" title="DNS 查询方法"></a>DNS 查询方法</h2><blockquote>
+<p>具体DNS查询是如何实现的呢？</p>
+<p>一般是如下两种方法</p>
+</blockquote>
+<h3 id="递归查询-recursive-query"><a href="#递归查询-recursive-query" class="headerlink" title="递归查询 (recursive query)"></a>递归查询 (recursive query)</h3><ul>
+<li><p>简单来说就是：名字解析的负担交给被查询的名字服务器，它帮你查</p>
+</li>
+<li><p>被查询的名字服务器负载重? 就像图中root DNS server</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/dn4.png"></p>
+<h3 id="迭代查询-iterated-query"><a href="#迭代查询-iterated-query" class="headerlink" title="迭代查询(iterated query)"></a>迭代查询(iterated query)</h3><ul>
+<li><p>简单来说：被查询的名字服务器 回复可以被 查询的名字服务器的IP地址，给你指路，并不帮你查询</p>
+</li>
+<li><p>“我不知道它的名字，但是可以问 服务器”</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/dns5.png"></p>
+<blockquote>
+<p>可以看到这种情况，查询都是本地DNS服务器，降低了root DNS server负担。</p>
+</blockquote>
+<h2 id="DNS缓存和权威DNS记录更新"><a href="#DNS缓存和权威DNS记录更新" class="headerlink" title="DNS缓存和权威DNS记录更新"></a><strong>DNS</strong>缓存和权威<strong>DNS</strong>记录更新</h2><blockquote>
+<p>本地DNS服务器缓存，加快访问速度</p>
+</blockquote>
+<ul>
+<li><p>一旦名字服务器获得DNS映射, 它将缓存该映射到局部内存</p>
+<ul>
+<li> 服务器在一定时间后将丢弃缓存的信息</li>
+<li>本地DNS服务器可以缓存TLD服务器的IP地址<ul>
+<li>因此根DNS服务器不会被经常访问</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>权威DNS服务器记录更新:IETF动态更新/通报机制 • RFC 2136</p>
+</li>
+</ul>
+<h2 id="DNS记录"><a href="#DNS记录" class="headerlink" title="DNS记录"></a>DNS记录</h2><p>DNS: 存储资源记录(RR，Resource Records)的分布式数据库</p>
+<p>DNS记录是以RP格式四元组方式存储的</p>
+<p><strong>RR 格式: (name, value, type,ttl)</strong></p>
+<ul>
+<li><p><strong>Type=A(Adress)</strong></p>
+<ul>
+<li> <strong>name = 主机名</strong> </li>
+<li><strong>value = IP地址</strong></li>
+</ul>
+<p>相当于 一个域名指向一个ip地址</p>
+</li>
+<li><p><strong>Type=CNAME(canonical)</strong> </p>
+<ul>
+<li><p>name = 主机别名</p>
+<p><strong><a target="_blank" rel="noopener" href="http://www.ibm.com的真名为/">www.ibm.com的真名为</a></strong>servereast.backup2.ibm.com</p>
+</li>
+<li><p><strong>value = 真实的规范主机名</strong></p>
+</li>
+</ul>
+<p>相当于 一个域名指向另一个域名</p>
+</li>
+<li><p>Type=NS</p>
+<p>( name server )</p>
+<ul>
+<li><p>name = 域名(如foo.com)</p>
+</li>
+<li><p>value = 该域权威名字服务器的主机名 </p>
+</li>
+</ul>
+<p>相当于指向了它的域名服务器</p>
+</li>
+</ul>
+<blockquote>
+<p>还有很多规则不在这里一一列举</p>
+</blockquote>
+<h2 id="DNS协议、消息"><a href="#DNS协议、消息" class="headerlink" title="DNS协议、消息"></a>DNS协议、消息</h2><p>DNS也有自己的查询报文和应答报文，但是格式是相同的</p>
+<h3 id="报文头部"><a href="#报文头部" class="headerlink" title="报文头部"></a>报文头部</h3><ul>
+<li><p>标识符: 16位，查询和应答报文使 用相同的标识符</p>
+</li>
+<li><p>标志:有若干个标志构成，分别标 识不同的功能</p>
+</li>
+<li><p>查询/应答-0/ 1</p>
+</li>
+<li><p>查询希望是/非递归查询-1/0</p>
+</li>
+<li><p>应答可/否获得(支持)递归查询 -1/0</p>
+</li>
+<li><p>应答是/否来自权威名字服务器 -1/ 0</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="http://picreso.oss-cn-beijing.aliyuncs.com/dns6.png"></p>
+<h2 id="如何在DNS数据库中插入记录"><a href="#如何在DNS数据库中插入记录" class="headerlink" title="如何在DNS数据库中插入记录"></a>如何在DNS数据库中插入记录</h2><p>例子:刚刚创建一个“network”公司</p>
+<ul>
+<li><p>如果你想在注册登记机构注册你的域名network.com，则</p>
+</li>
+<li><p>需要提供你自己的基本权威DNS服务器和辅助权威DNS服务器的名字和IP地址</p>
+</li>
+<li><p>该注册登记机构将下列两条资源记录插入注册机构的DNS系统中:</p>
+</li>
+</ul>
+<p><code>(network.com, dns1.network.com, NS)</code></p>
+<p><code>(dns1.network.com, 212.212.212.1, A)</code></p>
+<ul>
+<li><p>如果你想建立一个网站，则可以将网址<a target="_blank" rel="noopener" href="http://www.network.com以类型a的方式记录到你的权威dns服务器dns1.network.com中./">www.network.com以类型A的方式记录到你的权威DNS服务器dns1.network.com中。</a></p>
+</li>
+<li><p>如果你想建一个邮件服务器，则可以将mail.network.com以类型MX的方式记录到你的权威DNS服务器dns1.network.com中。</p>
+</li>
+</ul>
+<h2 id="DNS安全问题"><a href="#DNS安全问题" class="headerlink" title="DNS安全问题"></a>DNS安全问题</h2><p>DDoS攻击:对根域名服务器或顶级域名服务器发起拒绝服务攻击，基于主机耗尽型的DNS查询拒绝服务</p>
+<p>重定向攻击:中间人攻击、DNS中毒攻击(发送欺骗的域名解析结果给DNS服务器)</p>
+<p>利用DNS实现DDoS攻击: DNS反弹式拒绝服务攻击(DNS reflector attacks，又称DNS amplification attacks)。伪造客户地址向大量的dns服务器发出请求，导致客户无法访问 dns服务器进行域名解析。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">刘训灼</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://liuxunzhuo.com/internet13/">https://liuxunzhuo.com/internet13/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a></div><div class="post_share"><div class="social-share" data-image="https://picreso.oss-cn-beijing.aliyuncs.com/dns.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/internet14/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">详解P2P技术</div></div></a></div><div class="next-post pull-right"><a href="/internet12/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/smtp.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">因特网中的电子邮件SMTP,POP3,IMAP</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/internet/" title="Internet发展史"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-20</div><div class="title">Internet发展史</div></div></a></div><div><a href="/internet1/" title="什么是Internet?"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-20</div><div class="title">什么是Internet?</div></div></a></div><div><a href="/internet10/" title="关于Web缓存"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/proxy.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-23</div><div class="title">关于Web缓存</div></div></a></div><div><a href="/internet11/" title="浅谈FTP文件传输协议"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/ftp3.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-23</div><div class="title">浅谈FTP文件传输协议</div></div></a></div><div><a href="/internet14/" title="详解P2P技术"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/p2p.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-24</div><div class="title">详解P2P技术</div></div></a></div><div><a href="/internet2/" title="谈谈网络边缘部分"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/internet2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-21</div><div class="title">谈谈网络边缘部分</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">刘训灼</div><div class="author-info__description">Hi! 我是刘训灼，这里是我分享技术的地方</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xunzhuo"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Zhihu"><i class="fab fa-zhihu"></i></a><a class="social-icon" href="mailto:mixdeers@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">Sorry folks 😫, my site is updating 🚀</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS%E4%BD%93%E7%B3%BB%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">DNS体系介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89DNS"><span class="toc-number">1.1.</span> <span class="toc-text">为什么要有DNS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E6%8F%90%E4%BE%9B%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">1.2.</span> <span class="toc-text">DNS提供的功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E7%89%B9%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">DNS特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B6%E7%BA%A7%E5%9F%9F-TLD-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%92%8C%E6%9D%83%E5%A8%81DNS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">顶级域(TLD)服务器和权威DNS服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0DNS%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.5.</span> <span class="toc-text">本地DNS服务器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DNS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">DNS工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">DNS 查询方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2-recursive-query"><span class="toc-number">2.1.1.</span> <span class="toc-text">递归查询 (recursive query)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E6%9F%A5%E8%AF%A2-iterated-query"><span class="toc-number">2.1.2.</span> <span class="toc-text">迭代查询(iterated query)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E7%BC%93%E5%AD%98%E5%92%8C%E6%9D%83%E5%A8%81DNS%E8%AE%B0%E5%BD%95%E6%9B%B4%E6%96%B0"><span class="toc-number">2.2.</span> <span class="toc-text">DNS缓存和权威DNS记录更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E8%AE%B0%E5%BD%95"><span class="toc-number">2.3.</span> <span class="toc-text">DNS记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E5%8D%8F%E8%AE%AE%E3%80%81%E6%B6%88%E6%81%AF"><span class="toc-number">2.4.</span> <span class="toc-text">DNS协议、消息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%A5%E6%96%87%E5%A4%B4%E9%83%A8"><span class="toc-number">2.4.1.</span> <span class="toc-text">报文头部</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8DNS%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E6%8F%92%E5%85%A5%E8%AE%B0%E5%BD%95"><span class="toc-number">2.5.</span> <span class="toc-text">如何在DNS数据库中插入记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.</span> <span class="toc-text">DNS安全问题</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/busy-week/" title="Crazy Weekdays：疯狂的一周"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aboutme.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Crazy Weekdays：疯狂的一周"/></a><div class="content"><a class="title" href="/busy-week/" title="Crazy Weekdays：疯狂的一周">Crazy Weekdays：疯狂的一周</a><time datetime="2020-05-28T04:46:48.000Z" title="Created 2020-05-28 12:46:48">2020-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo-coder/" title="Hexo主题-CoderV1.0发布啦"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/hexocoder.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo主题-CoderV1.0发布啦"/></a><div class="content"><a class="title" href="/hexo-coder/" title="Hexo主题-CoderV1.0发布啦">Hexo主题-CoderV1.0发布啦</a><time datetime="2020-05-26T01:42:10.000Z" title="Created 2020-05-26 09:42:10">2020-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/AI-stack/" title="人工智能该如何零基础入门👀？"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aiiia.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="人工智能该如何零基础入门👀？"/></a><div class="content"><a class="title" href="/AI-stack/" title="人工智能该如何零基础入门👀？">人工智能该如何零基础入门👀？</a><time datetime="2020-05-24T03:41:42.000Z" title="Created 2020-05-24 11:41:42">2020-05-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/markov-python/" title="✍️动手实现Markov-Chain"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/markov3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现Markov-Chain"/></a><div class="content"><a class="title" href="/markov-python/" title="✍️动手实现Markov-Chain">✍️动手实现Markov-Chain</a><time datetime="2020-05-22T03:23:56.000Z" title="Created 2020-05-22 11:23:56">2020-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/python-nn/" title="✍️动手实现NeuralNetwork"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/dpnn.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现NeuralNetwork"/></a><div class="content"><a class="title" href="/python-nn/" title="✍️动手实现NeuralNetwork">✍️动手实现NeuralNetwork</a><time datetime="2020-05-20T15:57:18.000Z" title="Created 2020-05-20 23:57:18">2020-05-20</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/dns.png')"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By 刘训灼</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'NOsswOncKgc8HOxqo9oxIWlX-gzGzoHsz',
+      appKey: 'z1FihjWEbS8uIfUQdmCtK7zz',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/4cob3d8hketdbkjf5vhfc43atka6tivs.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

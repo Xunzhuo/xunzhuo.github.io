@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="zh" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One-Hot编码原理解释 | 比特流技术</title><meta name="keywords" content="one-hot模型"><meta name="author" content="刘训灼"><meta name="copyright" content="刘训灼"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="one-hot虽然诞生已久，思想仍应该学习。本文谈谈经常遇到的one-hot模型，我们为什么要进行one-hot编码？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="One-Hot编码原理解释">
+<meta property="og:url" content="https://liuxunzhuo.com/one-hot/index.html">
+<meta property="og:site_name" content="比特流技术">
+<meta property="og:description" content="one-hot虽然诞生已久，思想仍应该学习。本文谈谈经常遇到的one-hot模型，我们为什么要进行one-hot编码？">
+<meta property="og:locale">
+<meta property="og:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/One-Hot_Encoding_print.png">
+<meta property="article:published_time" content="2020-05-07T12:54:16.000Z">
+<meta property="article:modified_time" content="2020-05-20T07:09:39.000Z">
+<meta property="article:author" content="刘训灼">
+<meta property="article:tag" content="one-hot模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picreso.oss-cn-beijing.aliyuncs.com/One-Hot_Encoding_print.png"><link rel="shortcut icon" href="https://picreso.oss-cn-beijing.aliyuncs.com/favicon.png"><link rel="canonical" href="https://liuxunzhuo.com/one-hot/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'One-Hot编码原理解释',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-05-20 15:09:39'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/One-Hot_Encoding_print.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">比特流技术</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">One-Hot编码原理解释</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-05-07T12:54:16.000Z" title="Created 2020-05-07 20:54:16">2020-05-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-05-20T07:09:39.000Z" title="Updated 2020-05-20 15:09:39">2020-05-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/">机器学习之旅</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="One-Hot编码原理解释"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/One-Hot_Encoding_print.png"></p>
+<h2 id="在机器学习中为什么要进行-One-Hot-编码？"><a href="#在机器学习中为什么要进行-One-Hot-编码？" class="headerlink" title="在机器学习中为什么要进行 One-Hot 编码？"></a>在机器学习中为什么要进行 One-Hot 编码？</h2><p>入门机器学习应用，尤其是需要对实际数据进行处理时，是很困难的。</p>
+<p>一般来说，机器学习教程会推荐你或要求你，在开始拟合模型之前，先以特定的方式准备好数据。</p>
+<p>其中，一个简单的例子就是对类别数据（Categorical data）进行 One-Hot 编码（又称独热编码）。</p>
+<ul>
+<li>为什么 One-Hot 编码是必要的？</li>
+<li>为什么你不能直接使用数据来拟合模型？</li>
+</ul>
+<p>在本文中，你将得到上述重要问题的答案，并能更好地理解机器学习应用中的数据准备工作。</p>
+<h2 id="什么是类别数据？"><a href="#什么是类别数据？" class="headerlink" title="什么是类别数据？"></a>什么是类别数据？</h2><p>类别数据是一种只有标签值而没有数值的变量。</p>
+<p>它的值通常属于一个大小固定且有限的集合。</p>
+<p>类别变量也常被称为 标称值（nominal）</p>
+<p>下面举例说明：</p>
+<ul>
+<li>宠物（pet）变量包含以下几种值：狗（dog）、猫（cat）。</li>
+<li>颜色（color）变量包含以下几种值：红（red）、绿（green）、蓝（blue）。</li>
+<li>位次（place）变量包含以下几种值：第一（first）、第二（second）和第三（third）。</li>
+</ul>
+<p>以上例子中的每个值都代表着一个不同的类别。</p>
+<p>有些类别彼此间存在一定的自然关系，比如自然的排序关系。</p>
+<p>上述例子中，位次（place）变量的值就有这种自然的排序关系。这种变量被称为序数变量（ordinal variable）。</p>
+<h2 id="类别数据有什么问题？"><a href="#类别数据有什么问题？" class="headerlink" title="类别数据有什么问题？"></a>类别数据有什么问题？</h2><p>有些算法可以直接应用于类别数据。</p>
+<p>比如，你可以不进行任何数据转换，将决策树算法直接应用于类别数据上（取决于具体实现方式）。</p>
+<p>但还有许多机器学习算法并不能直接操作标签数据。这些算法要求所有的输入输出变量都是数值（numeric）。</p>
+<p>通常来说，这种限制主要是因为这些机器学习算法的高效实现造成的，而不是算法本身的限制。</p>
+<p>但这也意味着我们需要把类别数据转换成数值形式。如果输出变量是类别变量，那你可能还得将模型的预测值转换回类别形式，以便在一些应用中展示或使用它们。</p>
+<h2 id="如何将类别数据转换成数值数据？"><a href="#如何将类别数据转换成数值数据？" class="headerlink" title="如何将类别数据转换成数值数据？"></a>如何将类别数据转换成数值数据？</h2><p>这包含两个步骤：</p>
+<ol>
+<li>整数编码</li>
+<li>One-Hot 编码</li>
+</ol>
+<h3 id="1-整数编码"><a href="#1-整数编码" class="headerlink" title="1. 整数编码"></a>1. 整数编码</h3><p>第一步，先要给每个类别值都分配一个整数值。</p>
+<p>比如，用 1 表示红色（red），2 表示绿色（green），3 表示蓝色（blue）。</p>
+<p>这种方式被称为标签编码或者整数编码，可以很轻松地将它还原回类别值。</p>
+<p>对于某些变量来说，这种编码就足够了。</p>
+<p>整数之间存在自然的排序关系，机器学习算法也许可以理解并利用这种关系。</p>
+<p>比如，前面的位次（place）例子中的序数变量就是一个很好的例子。对于它我们只需要进行标签编码就够了。</p>
+<h3 id="2-One-Hot-编码"><a href="#2-One-Hot-编码" class="headerlink" title="2. One-Hot 编码"></a>2. One-Hot 编码</h3><p>但对于不存在次序关系的类别变量，仅使用上述的整数编码是不够的。</p>
+<p>实际上，使用整数编码会让模型假设类别间存在自然的次序关系，从而导致结果不佳或得到意外的结果（预测值落在两个类别的中间）。</p>
+<p>这种情况下，就要对整数表示使用 One-Hot 编码了。One-Hot 编码会去除整数编码，并为每个整数值都创建一个二值变量。</p>
+<p>在颜色（color）的示例中，有 3 种类别，因此需要 3 个二值变量进行编码。对应的颜色位置上将被标为“1”，其它颜色位置上会被标为“0”。</p>
+<p>比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">red, green, blue</span><br><span class="line">1, 0, 0</span><br><span class="line">0, 1, 0</span><br><span class="line">0, 0, 1</span><br></pre></td></tr></table></figure>
+
+<p>在统计学等领域中，这种二值变量通常被称为“虚拟变量”或“哑变量”（dummy variable）。</p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在本文中，你应该了解了为什么在使用机器学习算法时通常要对类别数据进行编码。</p>
+<p>特别要注意：</p>
+<ul>
+<li>类别数据的定义是由一组有限集合中的值构成的变量。</li>
+<li>大多数机器学习算法都需要输入数值变量，并会输出数值变量。</li>
+<li>通过整数编码与 One-Hot 编码可以将类别数据转换为整型数据。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">刘训灼</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://liuxunzhuo.com/one-hot/">https://liuxunzhuo.com/one-hot/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/one-hot%E6%A8%A1%E5%9E%8B/">one-hot模型</a></div><div class="post_share"><div class="social-share" data-image="https://picreso.oss-cn-beijing.aliyuncs.com/One-Hot_Encoding_print.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/chatbotstack/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bV0zk9.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">如何设计一个聊天机器人？谈谈技术路线</div></div></a></div><div class="next-post pull-right"><a href="/chatbot/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/louis-on-developing.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">聊天机器人Louis</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/bit.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">刘训灼</div><div class="author-info__description">Hi! 我是刘训灼，这里是我分享技术的地方</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">52</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xunzhuo"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://github.com/Xunzhuo" target="_blank" title="Zhihu"><i class="fab fa-zhihu"></i></a><a class="social-icon" href="mailto:mixdeers@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">Sorry folks 😫, my site is updating 🚀</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C-One-Hot-%E7%BC%96%E7%A0%81%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">在机器学习中为什么要进行 One-Hot 编码？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%B1%BB%E5%88%AB%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">什么是类别数据？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%88%AB%E6%95%B0%E6%8D%AE%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">类别数据有什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%B0%86%E7%B1%BB%E5%88%AB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B0%E5%80%BC%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">如何将类别数据转换成数值数据？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B4%E6%95%B0%E7%BC%96%E7%A0%81"><span class="toc-number">4.1.</span> <span class="toc-text">1. 整数编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-One-Hot-%E7%BC%96%E7%A0%81"><span class="toc-number">4.2.</span> <span class="toc-text">2. One-Hot 编码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/busy-week/" title="Crazy Weekdays：疯狂的一周"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aboutme.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Crazy Weekdays：疯狂的一周"/></a><div class="content"><a class="title" href="/busy-week/" title="Crazy Weekdays：疯狂的一周">Crazy Weekdays：疯狂的一周</a><time datetime="2020-05-28T04:46:48.000Z" title="Created 2020-05-28 12:46:48">2020-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo-coder/" title="Hexo主题-CoderV1.0发布啦"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/hexocoder.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo主题-CoderV1.0发布啦"/></a><div class="content"><a class="title" href="/hexo-coder/" title="Hexo主题-CoderV1.0发布啦">Hexo主题-CoderV1.0发布啦</a><time datetime="2020-05-26T01:42:10.000Z" title="Created 2020-05-26 09:42:10">2020-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/AI-stack/" title="人工智能该如何零基础入门👀？"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/aiiia.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="人工智能该如何零基础入门👀？"/></a><div class="content"><a class="title" href="/AI-stack/" title="人工智能该如何零基础入门👀？">人工智能该如何零基础入门👀？</a><time datetime="2020-05-24T03:41:42.000Z" title="Created 2020-05-24 11:41:42">2020-05-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/markov-python/" title="✍️动手实现Markov-Chain"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/markov3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现Markov-Chain"/></a><div class="content"><a class="title" href="/markov-python/" title="✍️动手实现Markov-Chain">✍️动手实现Markov-Chain</a><time datetime="2020-05-22T03:23:56.000Z" title="Created 2020-05-22 11:23:56">2020-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/python-nn/" title="✍️动手实现NeuralNetwork"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://picreso.oss-cn-beijing.aliyuncs.com/dpnn.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="✍️动手实现NeuralNetwork"/></a><div class="content"><a class="title" href="/python-nn/" title="✍️动手实现NeuralNetwork">✍️动手实现NeuralNetwork</a><time datetime="2020-05-20T15:57:18.000Z" title="Created 2020-05-20 23:57:18">2020-05-20</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://picreso.oss-cn-beijing.aliyuncs.com/One-Hot_Encoding_print.png')"><div id="footer-wrap"><div class="copyright">&copy;2018 - 2021 By 刘训灼</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'NOsswOncKgc8HOxqo9oxIWlX-gzGzoHsz',
+      appKey: 'z1FihjWEbS8uIfUQdmCtK7zz',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script src="//code.tidio.co/4cob3d8hketdbkjf5vhfc43atka6tivs.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
